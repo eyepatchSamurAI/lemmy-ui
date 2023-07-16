@@ -27,6 +27,7 @@ export const fetchLimit = 20;
 export const relTags = "noopener nofollow";
 export const emDash = "\u2014";
 export const authCookieName = "jwt";
+export const refreshTokenCookieName = "refresh_token";
 
 /**
  * Accepted formats:

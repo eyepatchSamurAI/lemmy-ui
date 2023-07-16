@@ -5,16 +5,21 @@ import jwt_decode from "jwt-decode";
 import { LoginResponse, MyUserInfo } from "lemmy-js-client";
 import { toast } from "../toast";
 import { I18NextService } from "./I18NextService";
+// import { UUID } from "crypto";
 
 interface Claims {
   sub: number;
   iss: string;
   iat: number;
+  jti: string;
+  exp: number;
+  is_refresh_token: boolean;
 }
 
 interface JwtInfo {
   claims: Claims;
   jwt: string;
+  refresh_token: string;
 }
 
 export class UserService {
@@ -25,7 +30,6 @@ export class UserService {
   private constructor() {
     this.#setJwtInfo();
   }
-
   public login({
     res,
     showToast = true,
@@ -33,12 +37,13 @@ export class UserService {
     res: LoginResponse;
     showToast?: boolean;
   }) {
+    console.log("Inside UserService login: ", res.refresh_token);
     const expires = new Date();
     expires.setDate(expires.getDate() + 365);
 
-    if (isBrowser() && res.jwt) {
+    if (isBrowser() && res.jwt && res.refresh_token) {
       showToast && toast(I18NextService.i18n.t("logged_in"));
-      setAuthCookie(res.jwt);
+      setAuthCookie(res.jwt, res.refresh_token);
       this.#setJwtInfo();
     }
   }
@@ -72,12 +77,13 @@ export class UserService {
       }
 
       return undefined;
-      // throw msg;
     }
   }
 
   #setJwtInfo() {
     if (isBrowser()) {
+      const a = cookie.parse(document.cookie);
+      console.log("AAAAAAAAAAa ", a);
       const { jwt } = cookie.parse(document.cookie);
 
       if (jwt) {

@@ -54,6 +54,7 @@ export class Login extends Component<any, State> {
   render() {
     return (
       <div className="login container-lg">
+        <p>Login Pageeeeeeeeeeeeeeeee</p> {/* This is your new paragraph */}
         <HtmlTags
           title={this.documentTitle}
           path={this.context.router.route.match.url}
@@ -154,6 +155,7 @@ export class Login extends Component<any, State> {
   async handleLoginSubmit(i: Login, event: any) {
     event.preventDefault();
     const { password, totp_2fa_token, username_or_email } = i.state.form;
+    console.log("totp_2fa_token: ", totp_2fa_token);
 
     if (username_or_email && password) {
       i.setState({ loginRes: { state: "loading" } });
@@ -178,6 +180,7 @@ export class Login extends Component<any, State> {
         }
 
         case "success": {
+          console.log("refresh_token", loginRes.data.refresh_token);
           UserService.Instance.login({
             res: loginRes.data,
           });

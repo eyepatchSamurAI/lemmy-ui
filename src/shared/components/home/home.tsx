@@ -659,6 +659,7 @@ export class Home extends Component<any, HomeState> {
   }
 
   get listings() {
+    console.log("ppppppppppppppppppppppppppppppppppppppppppppppppppppppppp");
     const { dataType } = getHomeQueryParams();
     const siteRes = this.state.siteRes;
 
